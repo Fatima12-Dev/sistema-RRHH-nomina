@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="page(content, admin)" lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sistema RR.HH. y Nomina</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="brand">RR.HH. &amp; Nomina</div>
+    <div class="user-box" th:if="${usuario != null}">
+      <span th:text="${usuario.nombre}">Usuario</span>
+      <span class="badge-rol" th:text="${usuario.esRrhh()} ? 'RR.HH.' : 'Empleado'">Rol</span>
+      <a class="btn btn-sm btn-gray" th:href="@{/logout}">Salir</a>
+    </div>
+  </header>
+
+  <nav class="app-nav" th:if="${usuario != null}">
+    <a th:href="@{/panel}" th:classappend="${activo == 'inicio'} ? 'active'">Inicio</a>
+    <a th:href="@{/panel/mis-datos}" th:if="${!usuario.esRrhh()}"
+       th:classappend="${activo == 'misdatos'} ? 'active'">Mis Datos</a>
+    <a th:href="@{/panel/mi-recibo}" th:if="${!usuario.esRrhh()}"
+       th:classappend="${activo == 'recibo'} ? 'active'">Mi Recibo</a>
+    <a th:href="@{/panel/mi-asistencia}" th:if="${!usuario.esRrhh()}"
+       th:classappend="${activo == 'miasistencia'} ? 'active'">Mi Asistencia</a>
+    <a th:href="@{/panel/admin/empleados}" th:if="${usuario.esRrhh()}"
+       th:classappend="${activo == 'empleados'} ? 'active'">Empleados</a>
+    <a th:href="@{/panel/admin/asistencias}" th:if="${usuario.esRrhh()}"
+       th:classappend="${activo == 'asistencias'} ? 'active'">Asistencias</a>
+    <a th:href="@{/panel/admin/vacaciones}" th:if="${usuario.esRrhh()}"
+       th:classappend="${activo == 'vacaciones'} ? 'active'">Vacaciones</a>
+  </nav>
+
+  <main class="app-main">
+    <div class="admin-banner" th:if="${admin}">
+      Area Administrativa &middot; Recursos Humanos
+    </div>
+    <th:block th:replace="${content}">Contenido</th:block>
+  </main>
+
+  <footer class="app-footer">
+    Sistema de Gestion de RR.HH. y Nomina &copy; 2026 &middot; Desarrollo Web Activo
+  </footer>
+
+</body>
+</html>

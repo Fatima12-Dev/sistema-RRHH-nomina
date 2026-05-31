@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/admin :: adminPage(~{::content})}">
+<body>
+<th:block th:fragment="content">
+
+  <h1>Control de Asistencias</h1>
+
+  <div class="card">
+    <h2>Filtrar por Fecha</h2>
+    <form th:action="@{/panel/admin/asistencias}" method="get" class="form-inline">
+      <div class="form-row">
+        <label>Fecha</label>
+        <input type="date" name="fecha" th:value="${fechaSel}"/>
+      </div>
+      <button class="btn" type="submit">Filtrar</button>
+      <a class="btn btn-gray" th:href="@{/panel/admin/asistencias}">Ver todas</a>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Registros <span class="muted" th:text="'(' + ${#lists.size(asistencias)} + ')'">(0)</span></h2>
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Empleado ID</th><th>Fecha</th><th>Horas trabajadas</th><th>Horas extra</th></tr>
+      </thead>
+      <tbody>
+        <tr th:if="${#lists.isEmpty(asistencias)}"><td colspan="5" class="muted">Sin registros.</td></tr>
+        <tr th:each="a : ${asistencias}">
+          <td th:text="${a.id}">0</td>
+          <td th:text="${a.empleadoId}">0</td>
+          <td th:text="${a.fecha}">-</td>
+          <td th:text="${a.horasTrabajadas}">0</td>
+          <td th:text="${a.horasExtra}">0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</th:block>
+</body>
+</html>

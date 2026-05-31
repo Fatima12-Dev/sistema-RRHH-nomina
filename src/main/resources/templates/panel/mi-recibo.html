@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/main :: page(~{::content}, false)}">
+<body>
+<th:block th:fragment="content">
+
+  <h1>Mi Recibo de Sueldo</h1>
+
+  <div class="card recibo" style="max-width:480px;">
+    <h2 th:text="${recibo['nombre']}">Empleado</h2>
+    <div><span>Salario base</span><span th:text="${recibo['salarioBase']}">0</span></div>
+    <div><span>Horas extra acumuladas</span><span th:text="${recibo['horasExtraAcumuladas']}">0</span></div>
+    <div><span>Pago por horas extra</span><span th:text="${recibo['pagoHorasExtra']}">0</span></div>
+    <div><span>Bonificaciones</span><span th:text="${recibo['bonificaciones']}">0</span></div>
+    <div><span>Deducciones</span><span th:text="${recibo['deducciones']}">0</span></div>
+    <div class="total"><span>Salario neto</span><span th:text="${recibo['salarioNeto']}">0</span></div>
+  </div>
+
+</th:block>
+</body>
+</html>

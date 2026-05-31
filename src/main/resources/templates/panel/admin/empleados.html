@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/admin :: adminPage(~{::content})}">
+<body>
+<th:block th:fragment="content">
+
+  <h1>Gestion de Empleados</h1>
+
+  <div class="card">
+    <h2>Buscar y Filtrar</h2>
+    <form th:action="@{/panel/admin/empleados}" method="get" class="form-inline">
+      <div class="form-row">
+        <label>Buscar (nombre o cargo)</label>
+        <input type="text" name="q" th:value="${q}" placeholder="Ej: Ana, Analista..."/>
+      </div>
+      <div class="form-row">
+        <label>Departamento</label>
+        <select name="departamento">
+          <option value="">Todos</option>
+          <option th:each="d : ${departamentos}" th:value="${d}" th:text="${d}"
+                  th:selected="${d == departamentoSel}">Dpto</option>
+        </select>
+      </div>
+      <button class="btn" type="submit">Filtrar</button>
+      <a class="btn btn-gray" th:href="@{/panel/admin/empleados}">Limpiar</a>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Empleados <span class="muted" th:text="'(' + ${totalRegistros} + ')'">(0)</span></h2>
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Nombre</th><th>Cargo</th><th>Departamento</th><th>Salario</th><th>Ingreso</th><th>Accion</th></tr>
+      </thead>
+      <tbody>
+        <tr th:if="${#lists.isEmpty(empleados)}"><td colspan="7" class="muted">No hay empleados que coincidan.</td></tr>
+        <tr th:each="e : ${empleados}">
+          <td th:text="${e.id}">0</td>
+          <td th:text="${e.nombre}">-</td>
+          <td th:text="${e.cargo}">-</td>
+          <td th:text="${e.departamento}">-</td>
+          <td th:text="${e.salarioBase}">-</td>
+          <td th:text="${e.fechaIngreso}">-</td>
+          <td>
+            <form th:action="@{'/panel/admin/empleados/' + ${e.id} + '/eliminar'}" method="post"
+                  onsubmit="return confirm('¿Eliminar este empleado?');" style="display:inline;">
+              <button class="btn btn-sm btn-red" type="submit">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="paginacion" th:if="${totalPaginas > 1}">
+      <a class="btn btn-sm btn-gray"
+         th:href="@{/panel/admin/empleados(q=${q}, departamento=${departamentoSel}, page=${paginaActual - 1})}"
+         th:classappend="${paginaActual == 0} ? 'disabled'">Anterior</a>
+
+      <a class="btn btn-sm"
+         th:each="i : ${#numbers.sequence(0, totalPaginas - 1)}"
+         th:href="@{/panel/admin/empleados(q=${q}, departamento=${departamentoSel}, page=${i})}"
+         th:classappend="${i == paginaActual} ? 'btn' : 'btn-gray'"
+         th:text="${i + 1}">1</a>
+
+      <a class="btn btn-sm btn-gray"
+         th:href="@{/panel/admin/empleados(q=${q}, departamento=${departamentoSel}, page=${paginaActual + 1})}"
+         th:classappend="${paginaActual == totalPaginas - 1} ? 'disabled'">Siguiente</a>
+    </div>
+    <p class="muted paginacion-info" th:if="${totalPaginas > 1}"
+       th:text="'Pagina ' + (${paginaActual} + 1) + ' de ' + ${totalPaginas}">Pagina</p>
+  </div>
+
+  <div class="card">
+    <h2>Nuevo Empleado</h2>
+    <form th:action="@{/panel/admin/empleados}" method="post">
+      <div class="form-inline">
+        <div class="form-row"><label>Nombre</label><input type="text" name="nombre" required/></div>
+        <div class="form-row"><label>Cargo</label><input type="text" name="cargo" required/></div>
+        <div class="form-row"><label>Departamento</label><input type="text" name="departamento" required/></div>
+        <div class="form-row"><label>Salario base</label><input type="number" step="0.01" min="1" name="salarioBase" required/></div>
+        <div class="form-row"><label>Fecha ingreso</label><input type="date" name="fechaIngreso" required/></div>
+        <button class="btn btn-green" type="submit">Agregar</button>
+      </div>
+    </form>
+  </div>
+
+</th:block>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ingreso - Sistema RR.HH.</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body style="justify-content:center; align-items:center;">
+  <div class="card" style="max-width:420px; width:100%;">
+    <h1 style="text-align:center;">Sistema RR.HH. y Nomina</h1>
+    <p class="muted" style="text-align:center; margin-bottom:18px;">Selecciona como deseas ingresar</p>
+
+    <div th:if="${error}" class="alert alert-error" th:text="${error}">error</div>
+
+    <form th:action="@{/login}" method="post">
+      <div class="form-row">
+        <label>Rol</label>
+        <select name="rol" id="rol" onchange="toggleEmp()">
+          <option value="RRHH">Recursos Humanos (acceso total)</option>
+          <option value="EMPLEADO">Empleado (solo mis datos)</option>
+        </select>
+      </div>
+
+      <div class="form-row" id="empBox" style="display:none;">
+        <label>Empleado</label>
+        <select name="empleadoId">
+          <option th:each="e : ${empleados}" th:value="${e.id}"
+                  th:text="${e.nombre} + ' - ' + ${e.cargo}">Empleado</option>
+        </select>
+      </div>
+
+      <button class="btn" type="submit" style="width:100%;">Ingresar</button>
+    </form>
+  </div>
+
+  <script>
+    function toggleEmp() {
+      var rol = document.getElementById('rol').value;
+      document.getElementById('empBox').style.display = (rol === 'EMPLEADO') ? 'block' : 'none';
+    }
+    toggleEmp();
+  </script>
+</body>
+</html>

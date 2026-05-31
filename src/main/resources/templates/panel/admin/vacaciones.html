@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/admin :: adminPage(~{::content})}">
+<body>
+<th:block th:fragment="content">
+
+  <h1>Gestion de Vacaciones</h1>
+
+  <div class="card">
+    <h2>Solicitudes</h2>
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Empleado</th><th>Inicio</th><th>Fin</th><th>Estado</th><th>Acciones</th></tr>
+      </thead>
+      <tbody>
+        <tr th:if="${#lists.isEmpty(vacaciones)}"><td colspan="6" class="muted">Sin solicitudes.</td></tr>
+        <tr th:each="v : ${vacaciones}">
+          <td th:text="${v.id}">0</td>
+          <td th:text="${v.empleadoId}">0</td>
+          <td th:text="${v.fechaInicio}">-</td>
+          <td th:text="${v.fechaFin}">-</td>
+          <td><span class="estado" th:classappend="'estado-' + ${v.estado}" th:text="${v.estado}">-</span></td>
+          <td>
+            <th:block th:if="${v.estado == 'Pendiente'}">
+              <form th:action="@{'/panel/admin/vacaciones/' + ${v.id} + '/resolver'}" method="post" style="display:inline;">
+                <input type="hidden" name="estado" value="Aprobado"/>
+                <button class="btn btn-sm btn-green" type="submit">Aprobar</button>
+              </form>
+              <form th:action="@{'/panel/admin/vacaciones/' + ${v.id} + '/resolver'}" method="post" style="display:inline;">
+                <input type="hidden" name="estado" value="Rechazado"/>
+                <button class="btn btn-sm btn-red" type="submit">Rechazar</button>
+              </form>
+              <form th:action="@{'/panel/admin/vacaciones/' + ${v.id} + '/eliminar'}" method="post"
+                    onsubmit="return confirm('¿Eliminar solicitud pendiente?');" style="display:inline;">
+                <button class="btn btn-sm btn-gray" type="submit">Eliminar</button>
+              </form>
+            </th:block>
+            <span th:unless="${v.estado == 'Pendiente'}" class="muted">Resuelta</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</th:block>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+  <div th:fragment="estadisticas(total, presentes, horasExtra)" class="stats-row">
+    <div class="stat-card">
+      <div class="stat-card-num" th:text="${presentes}">0</div>
+      <div class="stat-card-lbl">Empleados presentes hoy</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-num" th:text="${total}">0</div>
+      <div class="stat-card-lbl">Total de empleados</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-num" th:text="${horasExtra}">0</div>
+      <div class="stat-card-lbl">Horas extra de hoy</div>
+    </div>
+  </div>
+
+  <div th:fragment="asistenciaHoy(total, presentes, horasExtra)" class="webpart">
+    <h3>Asistencia de Hoy</h3>
+    <div class="stat-grid">
+      <div class="stat">
+        <div class="num" th:text="${presentes}">0</div>
+        <div class="lbl">Empleados presentes</div>
+      </div>
+      <div class="stat">
+        <div class="num" th:text="${total}">0</div>
+        <div class="lbl">Total empleados</div>
+      </div>
+      <div class="stat">
+        <div class="num" th:text="${horasExtra}">0</div>
+        <div class="lbl">Horas extra hoy</div>
+      </div>
+    </div>
+  </div>
+
+  <div th:fragment="notificacionesVacaciones(pendientes)" class="card">
+    <div class="webpart-head">
+      <h3>Solicitudes de Vacaciones Pendientes</h3>
+      <span class="contador" th:text="${#lists.size(pendientes)}">0</span>
+    </div>
+    <p class="muted" th:if="${#lists.isEmpty(pendientes)}">No hay solicitudes pendientes.</p>
+    <div class="notif-list" th:unless="${#lists.isEmpty(pendientes)}">
+      <div th:each="v : ${pendientes}" class="notif-item">
+        <div class="notif-info">
+          <strong th:text="'Solicitud #' + ${v.id}">#</strong>
+          <span class="muted">Empleado <span th:text="${v.empleadoId}">0</span></span>
+          <span class="notif-fechas" th:text="${v.fechaInicio} + ' al ' + ${v.fechaFin}">fechas</span>
+        </div>
+        <span class="estado estado-Pendiente">Pendiente</span>
+      </div>
+    </div>
+    <a class="btn btn-sm" style="margin-top:14px;" th:href="@{/panel/admin/vacaciones}"
+       th:unless="${#lists.isEmpty(pendientes)}">Gestionar solicitudes</a>
+  </div>
+
+</body>
+</html>

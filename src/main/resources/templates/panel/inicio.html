@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/main :: page(~{::content}, false)}">
+<body>
+<th:block th:fragment="content">
+
+  <h1>Tablero Principal</h1>
+
+  <div th:if="${usuario.esRrhh()}">
+    <div th:replace="~{webparts/parts :: estadisticas(${totalEmpleados}, ${presentesHoy}, ${horasExtraHoy})}"></div>
+    <div th:replace="~{webparts/parts :: notificacionesVacaciones(${pendientes})}"></div>
+  </div>
+
+  <div th:unless="${usuario.esRrhh()}">
+    <div class="card">
+      <h2 th:text="'Bienvenido(a), ' + ${usuario.nombre}">Bienvenido</h2>
+      <p class="muted">Desde aqui puedes consultar tus datos, tu recibo de sueldo y tu asistencia.</p>
+    </div>
+
+    <div th:replace="~{webparts/parts :: estadisticas(${totalEmpleados}, ${presentesHoy}, ${horasExtraHoy})}"></div>
+
+    <div class="card recibo" style="max-width:480px;">
+      <h3>Resumen de mi Recibo</h3>
+      <div><span>Salario base</span><span th:text="${recibo['salarioBase']}">0</span></div>
+      <div><span>Horas extra</span><span th:text="${recibo['horasExtraAcumuladas']}">0</span></div>
+      <div><span>Pago horas extra</span><span th:text="${recibo['pagoHorasExtra']}">0</span></div>
+      <div><span>Bonificaciones</span><span th:text="${recibo['bonificaciones']}">0</span></div>
+      <div><span>Deducciones</span><span th:text="${recibo['deducciones']}">0</span></div>
+      <div class="total"><span>Salario neto</span><span th:text="${recibo['salarioNeto']}">0</span></div>
+    </div>
+  </div>
+
+</th:block>
+</body>
+</html>

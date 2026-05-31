@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/main :: page(~{::content}, false)}">
+<body>
+<th:block th:fragment="content">
+
+  <h1>Mi Asistencia</h1>
+
+  <div class="card">
+    <h2>Registrar Asistencia</h2>
+    <form th:action="@{/panel/mi-asistencia}" method="post" class="form-inline">
+      <div class="form-row">
+        <label>Fecha</label>
+        <input type="date" name="fecha" th:value="${hoy}" required/>
+      </div>
+      <div class="form-row">
+        <label>Horas trabajadas</label>
+        <input type="number" name="horasTrabajadas" min="0" value="8" required/>
+      </div>
+      <div class="form-row">
+        <label>Horas extra</label>
+        <input type="number" name="horasExtra" min="0" value="0" required/>
+      </div>
+      <button class="btn" type="submit">Registrar</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Historial de Asistencia</h2>
+    <table>
+      <thead>
+        <tr><th>Fecha</th><th>Horas trabajadas</th><th>Horas extra</th></tr>
+      </thead>
+      <tbody>
+        <tr th:if="${#lists.isEmpty(asistencias)}"><td colspan="3" class="muted">Sin registros.</td></tr>
+        <tr th:each="a : ${asistencias}">
+          <td th:text="${a.fecha}">-</td>
+          <td th:text="${a.horasTrabajadas}">0</td>
+          <td th:text="${a.horasExtra}">0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</th:block>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/main :: page(~{::content}, false)}">
+<body>
+<th:block th:fragment="content">
+
+  <h1>Mis Datos</h1>
+
+  <div class="card">
+    <h2>Informacion Personal</h2>
+    <table>
+      <tr><th>Nombre</th><td th:text="${empleado.nombre}">-</td></tr>
+      <tr><th>Cargo</th><td th:text="${empleado.cargo}">-</td></tr>
+      <tr><th>Departamento</th><td th:text="${empleado.departamento}">-</td></tr>
+      <tr><th>Salario base</th><td th:text="${empleado.salarioBase}">-</td></tr>
+      <tr><th>Fecha de ingreso</th><td th:text="${empleado.fechaIngreso}">-</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Mis Solicitudes de Vacaciones</h2>
+    <table>
+      <thead>
+        <tr><th>#</th><th>Inicio</th><th>Fin</th><th>Estado</th></tr>
+      </thead>
+      <tbody>
+        <tr th:if="${#lists.isEmpty(vacaciones)}"><td colspan="4" class="muted">Sin solicitudes.</td></tr>
+        <tr th:each="v : ${vacaciones}">
+          <td th:text="${v.id}">0</td>
+          <td th:text="${v.fechaInicio}">-</td>
+          <td th:text="${v.fechaFin}">-</td>
+          <td><span class="estado" th:classappend="'estado-' + ${v.estado}" th:text="${v.estado}">-</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Solicitar Vacaciones</h2>
+    <form th:action="@{/panel/mis-vacaciones}" method="post" class="form-inline">
+      <div class="form-row">
+        <label>Fecha inicio</label>
+        <input type="date" name="fechaInicio" required/>
+      </div>
+      <div class="form-row">
+        <label>Fecha fin</label>
+        <input type="date" name="fechaFin" required/>
+      </div>
+      <button class="btn" type="submit">Enviar Solicitud</button>
+    </form>
+  </div>
+
+</th:block>
+</body>
+</html>
