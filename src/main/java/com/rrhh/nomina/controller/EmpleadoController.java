@@ -4,6 +4,7 @@ import com.rrhh.nomina.model.Empleado;
 import com.rrhh.nomina.service.EmpleadoService;
 import com.rrhh.nomina.service.NominaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,16 @@ public class EmpleadoController {
     @GetMapping
     public ResponseEntity<List<Empleado>> listar() {
         return new ResponseEntity<>(empleadoService.obtenerTodos(), HttpStatus.OK); // 200 OK
+    }
+
+    @GetMapping("/paginado")
+    public ResponseEntity<Page<Empleado>> listarPaginado(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) String departamento) {
+        Page<Empleado> resultado = empleadoService.obtenerPaginado(page, size, q, departamento);
+        return new ResponseEntity<>(resultado, HttpStatus.OK); // 200 OK
     }
 
     @GetMapping("/{id}")

@@ -20,6 +20,11 @@ public class VacacionesController {
         return new ResponseEntity<>(vacacionesService.obtenerTodas(), HttpStatus.OK);
     }
 
+    @GetMapping("/empleado/{empleadoId}")
+    public ResponseEntity<List<SolicitudVacaciones>> porEmpleado(@PathVariable Long empleadoId) {
+        return new ResponseEntity<>(vacacionesService.obtenerPorEmpleado(empleadoId), HttpStatus.OK);
+    }
+
     // Cuando el empleado pide vacaciones (entra automáticamente como 'Pendiente')
     @PostMapping
     public ResponseEntity<SolicitudVacaciones> crear(@RequestBody SolicitudVacaciones solicitud) {
